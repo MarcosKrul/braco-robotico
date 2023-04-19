@@ -13,6 +13,8 @@ private:
   byte defaultAngle;
   byte max;
   byte min;
+  byte currentAngle;
+  unsigned int delayTime;
   Servo servo;
 
   bool IsAngleValid(byte angle) {
@@ -34,28 +36,44 @@ private:
   }
 
 public:
-  ServoMotor(byte defaultAngle, byte min, byte max) {
+  ServoMotor(byte defaultAngle, byte min, byte max, unsigned int delayTime=0) {
     this->defaultAngle = defaultAngle;
     this->min = min;
     this->max = max;
+    this->delayTime = delayTime;
   }
 
   void Setup(byte pin) {
     this->servo.attach(pin);
     this->servo.write(this->defaultAngle);
+    this->currentAngle = this->defaultAngle;
   }
 
   void Write(byte angle) {
-    if (this->IsAngleValid(angle))
-      this->servo.write(angle);
+    if (angle == this->currentAngle) return;
+
+    if (this->IsAngleValid(angle)) {
+      int step = this->currentAngle < angle ? 1 : -1;
+
+      for (
+        int i=this->currentAngle ; 
+        (this->currentAngle<angle && i<=angle) || (this->currentAngle>angle && i>=angle); 
+        i = i+step
+      ) {
+        this->servo.write(i);
+        delay(this->delayTime);
+      }
+
+      this->currentAngle = angle;
+    }
   }
 };
 
 
 char buffer2serialData[CONST_UART_BUFFER_SIZE];
 byte angle_base, angle_mid, angle_hand;
-ServoMotor base = ServoMotor(90, 0, 180);
-ServoMotor mid = ServoMotor(90, 0, 90);
+ServoMotor base = ServoMotor(90, 0, 180, 10);
+ServoMotor mid = ServoMotor(90, 0, 90, 20);
 ServoMotor hand = ServoMotor(90, 55, 180);
 
 
