@@ -10,9 +10,11 @@
 class ServoMotor {
   
 private:
-  byte defaultAngle;
   byte max;
   byte min;
+
+protected:
+  byte defaultAngle;
   byte currentAngle;
   int offset;
   unsigned int delayTime;
@@ -51,7 +53,7 @@ public:
     this->currentAngle = this->defaultAngle;
   }
 
-  void Write(byte angle) {
+  virtual void Write(byte angle) {
     if (angle == this->currentAngle) return;
 
     if (this->IsAngleValid(angle)) {
@@ -67,6 +69,45 @@ public:
       }
 
       this->currentAngle = angle;
+      this->servo.write(this->currentAngle + this->offset);
+    }
+  }
+};
+
+
+class ServoMotorNonBlocking : public ServoMotor {
+
+private:
+  int targetAngle;
+  unsigned long lastWriteMillis;
+
+public:
+  ServoMotorNonBlocking(
+    byte defaultAngle, byte min, byte max, unsigned int delayTime=0, int offset=0
+  ) : ServoMotor(defaultAngle, min, max, delayTime, offset) {
+    this->targetAngle = -1;
+    this->lastWriteMillis = millis();
+  }
+
+  void Write(byte angle) override {
+    if (!this->IsAngleValid(angle) || angle == this->currentAngle) 
+      return;
+
+    this->targetAngle = angle;
+  }
+
+  void loop() {
+    if (this->targetAngle == -1) return;
+
+    int step = this->currentAngle < this->targetAngle ? 1 : -1;
+
+    if (millis() > this->lastWriteMillis + this->delayTime) {
+      this->servo.write(this->currentAngle += step);
+      this->lastWriteMillis = millis();
+    }
+
+    if (this->currentAngle == this->targetAngle) {
+      this->targetAngle = -1;
       this->servo.write(this->currentAngle + this->offset);
     }
   }
@@ -94,7 +135,7 @@ void setup() {
 
 void loop() {
   uartLoop(handleUartReceivedData);
-  delay(50);
+  delay(2);
 }
 
 void uartLoop(void(*cb)()) {
