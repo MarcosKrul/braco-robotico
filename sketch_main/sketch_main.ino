@@ -18,7 +18,6 @@ private:
   bool IsAngleValid(byte angle) {
     if (angle >= this->min && angle <= this->max) return true;
 
-    Serial.println();
     Serial.println("ERROR AT: ServoMotor.IsAngleValid");
 #if DEBUG
     Serial.print("Angle: ");
@@ -57,7 +56,7 @@ char buffer2serialData[CONST_UART_BUFFER_SIZE];
 byte angle_base, angle_mid, angle_hand;
 ServoMotor base = ServoMotor(90, 0, 180);
 ServoMotor mid = ServoMotor(90, 0, 90);
-ServoMotor hand = ServoMotor(90, 0, 180);
+ServoMotor hand = ServoMotor(90, 55, 180);
 
 
 void uartLoop(void(*)());
@@ -97,17 +96,20 @@ void uartLoop(void(*cb)()) {
 }
 
 void handleUartReceivedData() {
-  char *token = strtok(buffer2serialData, ","); 
+  char *token = strtok(buffer2serialData, ",");
   angle_base = atoi(token);
 
-  token = strtok(NULL, ","); 
-  angle_mid = atoi(token); 
+  token = strtok(NULL, ",");
+  angle_mid = atoi(token);
   
-  token = strtok(NULL, ","); 
-  angle_hand = atoi(token); 
+  token = strtok(NULL, ",");
+  angle_hand = atoi(token);
+
+  base.Write(angle_base);
+  mid.Write(angle_mid);
+  hand.Write(angle_hand);
   
 #if DEBUG
-  Serial.println();
   Serial.print("Valores recebidos pela serial: ");
   Serial.print(angle_base);
   Serial.print(", ");
