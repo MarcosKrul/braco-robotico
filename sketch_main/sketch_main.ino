@@ -14,6 +14,7 @@ private:
   byte max;
   byte min;
   byte currentAngle;
+  int offset;
   unsigned int delayTime;
   Servo servo;
 
@@ -36,16 +37,17 @@ private:
   }
 
 public:
-  ServoMotor(byte defaultAngle, byte min, byte max, unsigned int delayTime=0) {
+  ServoMotor(byte defaultAngle, byte min, byte max, unsigned int delayTime=0, int offset=0) {
     this->defaultAngle = defaultAngle;
     this->min = min;
     this->max = max;
+    this->offset = offset;
     this->delayTime = delayTime;
   }
 
   void Setup(byte pin) {
     this->servo.attach(pin);
-    this->servo.write(this->defaultAngle);
+    this->servo.write(this->defaultAngle + this->offset);
     this->currentAngle = this->defaultAngle;
   }
 
@@ -65,6 +67,7 @@ public:
       }
 
       this->currentAngle = angle;
+      this->servo.write(this->currentAngle + this->offset);
     }
   }
 };
@@ -72,9 +75,9 @@ public:
 
 char buffer2serialData[CONST_UART_BUFFER_SIZE];
 byte angle_base, angle_mid, angle_hand;
-ServoMotor base = ServoMotor(90, 0, 180, 10);
-ServoMotor mid = ServoMotor(90, 0, 90, 20);
-ServoMotor hand = ServoMotor(90, 55, 180);
+ServoMotor base = ServoMotor(90, 0, 180, 10, -5);
+ServoMotor mid = ServoMotor(90, 0, 90, 20, 10);
+ServoMotor hand = ServoMotor(90, 35, 180);
 
 
 void uartLoop(void(*)());
