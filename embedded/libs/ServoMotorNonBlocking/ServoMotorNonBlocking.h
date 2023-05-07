@@ -1,7 +1,7 @@
 #ifndef SERVO_MOTOR_NON_BLOCKING_H
 #define SERVO_MOTOR_NON_BLOCKING_H
 
-
+#include <Arduino.h>
 #include "ServoMotor.h"
 
 

@@ -2,6 +2,7 @@
 #define SERVO_MOTOR_H
 
 
+#include <Arduino.h>
 #include <Servo.h>
 
 
