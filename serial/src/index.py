@@ -1,12 +1,11 @@
 import roboticstoolbox as rtb
-from dotenv import load_dotenv
 
+from Configs import Configs
 from SerialControl import SerialControl
 
-
 if __name__ == '__main__':
-  load_dotenv()
+  configs = Configs()
 
-  serialControl = SerialControl()
+  serialControl = SerialControl(configs=configs.getProperty('serial'))
   if not serialControl.serialAvailable():
     exit(1)

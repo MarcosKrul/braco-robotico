@@ -1,15 +1,13 @@
 import serial
-from os import getenv
-
 
 class SerialControl:
 
-  def __init__(self) -> None:
+  def __init__(self, configs) -> None:
     self.__serial = None
   
-    port = getenv("SERIAL_COM")
-    baud_rate = getenv("SERIAL_BAUD_RATE")
-
+    port = configs['port']
+    baud_rate = configs['baud_rate']
+  
     print(f"Start serial at port {port} with baud rate {baud_rate}")
     
     try:
