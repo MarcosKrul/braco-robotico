@@ -37,7 +37,7 @@ void ServoMotor::Write(byte angle) {
     int step = this->currentAngle < angle ? 1 : -1;
 
     for (
-      int i=this->currentAngle ; 
+      int i=this->currentAngle + 1 ; 
       (this->currentAngle<angle && i<=angle) || (this->currentAngle>angle && i>=angle); 
       i = i+step
     ) {
