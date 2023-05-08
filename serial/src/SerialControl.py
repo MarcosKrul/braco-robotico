@@ -22,3 +22,7 @@ class SerialControl:
 
   def write(self, message) -> int:
     return self.__serial.write(message.encode())
+  
+  
+  def read(self):
+    return self.__serial.readline().decode().rstrip('\n')
