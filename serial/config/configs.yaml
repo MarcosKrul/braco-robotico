@@ -1,3 +1,21 @@
 serial:
-  port: COM3
+  port: COM5
   baud_rate: 9600
+l1:
+  d: 7
+  a: 2.5
+  alpha: 90
+  min: 0
+  max: 180
+l2:
+  d: 0
+  a: 8.75
+  alpha: 0
+  min: 0
+  max: 90
+l3:
+  d: 0
+  a: 11.5
+  alpha: 0
+  min: 35
+  max: 90
