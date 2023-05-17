@@ -3,19 +3,19 @@ from prettytable import PrettyTable
 
 from Configs import Configs
 from SerialControl import SerialControl
-from conversions import radians2degress, degress2radians
+from conversions import radians2degress
 from AkeBabaRobot import AkeBabaRobot
 
-if __name__ == '__main__':
+if __name__ == "__main__":
   configs = Configs()
 
   robot = AkeBabaRobot(
-    l1=configs.getProperty('l1'),
-    l2=configs.getProperty('l2'),
-    l3=configs.getProperty('l3'),
+    l1=configs.getProperty("l1"),
+    l2=configs.getProperty("l2"),
+    l3=configs.getProperty("l3"),
   )
 
-  serialControl = SerialControl(configs=configs.getProperty('serial'))
+  serialControl = SerialControl(configs=configs.getProperty("serial"))
   if not serialControl.serialAvailable():
     exit(1)
 

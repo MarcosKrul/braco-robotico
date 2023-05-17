@@ -23,11 +23,11 @@ class AkeBabaRobot(DHRobot):
 
   def __get_revolute_dh__(self, link_params) -> RevoluteDH:
     return RevoluteDH(
-      d=link_params['d'],
-      a=link_params['a'],
-      alpha=degress2radians(link_params['alpha']),
+      d=link_params["d"],
+      a=link_params["a"],
+      alpha=degress2radians(link_params["alpha"]),
       qlim=[
-        degress2radians(link_params['min']), 
-        degress2radians(link_params['max'])
+        degress2radians(link_params["min"]), 
+        degress2radians(link_params["max"])
       ]
     )
