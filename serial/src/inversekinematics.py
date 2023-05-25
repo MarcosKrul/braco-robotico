@@ -32,19 +32,21 @@ if __name__ == "__main__":
 
     inverse_kinematics_result = robot.ikine_min(frame, ilimit=100, qlim=True)
     
+    angle_string = "{:.2f},{:.2f},{:.2f}".format(
+      radians2degress(inverse_kinematics_result.q[0]),
+      radians2degress(inverse_kinematics_result.q[1]),
+      radians2degress(inverse_kinematics_result.q[2])
+    )
+    
     console_table.add_row([
       inverse_kinematics_result.success,
       inverse_kinematics_result.iterations,
-      "{}".format(input_string),
-      "{:.2f},{:.2f},{:.2f}".format(
-        radians2degress(inverse_kinematics_result.q[0]), 
-        radians2degress(inverse_kinematics_result.q[1]), 
-        radians2degress(inverse_kinematics_result.q[2]
-      )),
+      input_string,
+      angle_string
     ])
 
     print("RESULTADO DA CINEMÁTICA INVERSA")
     print(console_table)
 
-    serialControl.write(input_string)
+    serialControl.write(angle_string)
     print(serialControl.read())
