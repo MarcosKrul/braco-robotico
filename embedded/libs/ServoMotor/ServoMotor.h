@@ -19,12 +19,12 @@ protected:
   unsigned int delayTime;
   Servo servo;
 
-  bool IsAngleValid(byte);
+  bool ValidateAngle(float*);
 
 public:
   ServoMotor(byte,byte,byte,unsigned int=0,int=0);
   void Setup(byte);
-  virtual void Write(byte);
+  virtual void Write(float);
 };
 
 

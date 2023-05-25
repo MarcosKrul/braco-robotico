@@ -7,10 +7,11 @@ ServoMotorNonBlocking::ServoMotorNonBlocking(
   this->lastWriteMillis = millis();
 }
 
-void ServoMotorNonBlocking::Write(byte angle) {
-  if (!this->IsAngleValid(angle) || angle == this->currentAngle) 
+void ServoMotorNonBlocking::Write(float angle) {
+  if (angle == this->currentAngle) 
     return;
 
+  this->ValidateAngle(&angle);
   this->targetAngle = angle;
 }
 

@@ -13,7 +13,7 @@ private:
 
 public:
   ServoMotorNonBlocking(byte,byte,byte,unsigned int=0,int=0);
-  void Write(byte) override;
+  void Write(float) override;
   void loop();
 };
 

@@ -1,4 +1,4 @@
 ServoMotor      KEYWORD1
-IsAngleValid    KEYWORD2
+ValidateAngle   KEYWORD2
 Setup           KEYWORD2
 Write           KEYWORD2

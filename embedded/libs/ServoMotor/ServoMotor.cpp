@@ -1,17 +1,20 @@
 #include "ServoMotor.h"
 
-bool ServoMotor::IsAngleValid(byte angle) {
-  if (angle >= this->min && angle <= this->max) return true;
+bool ServoMotor::ValidateAngle(float* angle) {
+  if (*angle >= this->min && *angle <= this->max) return true;
 
   Serial.println("ERROR AT: ServoMotor.IsAngleValid");
   Serial.print("Angle: ");
-  Serial.println(angle);
+  Serial.println(*angle);
   Serial.print("Interval: (");
   Serial.print(this->min);
   Serial.print(",");
   Serial.print(this->max);
   Serial.print(")");
-  Serial.println(); 
+  Serial.println();
+
+  if (*angle < this->min) *angle = this->min;
+  if (*angle > this->max) *angle = this->max;
 
   return false;
 }
@@ -30,22 +33,21 @@ void ServoMotor::Setup(byte pin) {
   this->currentAngle = this->defaultAngle;
 }
 
-void ServoMotor::Write(byte angle) {
+void ServoMotor::Write(float angle) {
   if (angle == this->currentAngle) return;
 
-  if (this->IsAngleValid(angle)) {
-    int step = this->currentAngle < angle ? 1 : -1;
+  this->ValidateAngle(&angle);
+  int step = this->currentAngle < angle ? 1 : -1;
 
-    for (
-      int i=this->currentAngle + 1 ; 
-      (this->currentAngle<angle && i<=angle) || (this->currentAngle>angle && i>=angle); 
-      i = i+step
-    ) {
-      this->servo.write(i);
-      delay(this->delayTime);
-    }
-
-    this->currentAngle = angle;
-    this->servo.write(this->currentAngle + this->offset);
+  for (
+    int i=this->currentAngle + 1 ; 
+    (this->currentAngle<angle && i<=angle) || (this->currentAngle>angle && i>=angle); 
+    i = i+step
+  ) {
+    this->servo.write(i);
+    delay(this->delayTime);
   }
+
+  this->currentAngle = angle;
+  this->servo.write(this->currentAngle + this->offset);
 }
