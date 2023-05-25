@@ -9,7 +9,7 @@
 
 
 char buffer2serialData[CONST_UART_BUFFER_SIZE];
-byte angle_base, angle_mid, angle_hand;
+float angle_base, angle_mid, angle_hand;
 ServoMotorNonBlocking base = ServoMotorNonBlocking(90, 0, 180, 20, -5);
 ServoMotorNonBlocking mid = ServoMotorNonBlocking(90, 0, 90, 20, 10);
 ServoMotorNonBlocking hand = ServoMotorNonBlocking(90, 35, 180, 20);
@@ -58,13 +58,13 @@ void uartLoop(void(*cb)()) {
 
 void handleUartReceivedData() {
   char *token = strtok(buffer2serialData, ",");
-  angle_base = atoi(token);
+  angle_base = atof(token);
 
   token = strtok(NULL, ",");
-  angle_mid = atoi(token);
+  angle_mid = atof(token);
   
   token = strtok(NULL, ",");
-  angle_hand = atoi(token);
+  angle_hand = atof(token);
 
   base.Write(angle_base);
   mid.Write(angle_mid);
