@@ -1,3 +1,4 @@
+import time
 import numpy as np
 from spatialmath import SE3
 
@@ -52,6 +53,26 @@ if __name__ == "__main__":
   print("=== FRAME FINAL DA TRAJETÓRIA - OBTIDO ===");     print(robot.fkine(finalSolution.q))
   print("=== ÂNGULOS INICIAIS DA TRAJETÓRIA ===");         print(radians2degress(initialSolution.q))
   print("=== ÂNGULOS FINAIS DA TRAJETÓRIA ===");           print(radians2degress(finalSolution.q))
+
+  serialControl.write(
+    "{:.2f},{:.2f},{:.2f}".format(
+      radians2degress(initialSolution.q[0]),
+      radians2degress(initialSolution.q[1]),
+      radians2degress(initialSolution.q[2])
+    )
+  )
+  print(serialControl.read())
+
+  time.sleep(5)
+
+  serialControl.write(
+    "{:.2f},{:.2f},{:.2f}".format(
+      radians2degress(finalSolution.q[0]),
+      radians2degress(finalSolution.q[1]),
+      radians2degress(finalSolution.q[2])
+    )
+  )
+  print(serialControl.read())
     
   traj = np.array(pos)
   robot.plot(traj).hold()
